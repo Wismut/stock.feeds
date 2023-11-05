@@ -1,9 +1,11 @@
 package com.example.stock.feeds.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 @Data
+@NoArgsConstructor
 public class Tutorial {
     @Id
     private int id;

@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:8081")
 public class TutorialController {
-    final TutorialService tutorialService;
+    private final TutorialService tutorialService;
 
     @GetMapping("/tutorials")
     @ResponseStatus(HttpStatus.OK)
