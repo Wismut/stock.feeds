@@ -1,7 +1,5 @@
 package com.example.stock.feeds.service;
 
-import com.example.stock.feeds.model.Tutorial;
-import com.example.stock.feeds.repository.TutorialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
