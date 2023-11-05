@@ -1,7 +1,9 @@
 package com.example.stock.feeds.config;
 
+import com.example.stock.feeds.dto.StockRedisDto;
 import com.example.stock.feeds.model.Company;
-import com.example.stock.feeds.model.Stock;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +28,12 @@ public class WebConfig {
     }
 
     @Bean
-    public ReactiveRedisTemplate<String, Stock> reactiveRedisStockTemplate(ReactiveRedisConnectionFactory factory) {
-        Jackson2JsonRedisSerializer<Stock> serializer = new Jackson2JsonRedisSerializer<>(Stock.class);
+    public ReactiveRedisTemplate<String, StockRedisDto> reactiveRedisStockTemplate(ReactiveRedisConnectionFactory factory) {
+        Jackson2JsonRedisSerializer<StockRedisDto> serializer = new Jackson2JsonRedisSerializer<>(StockRedisDto.class);
 
-        RedisSerializationContext.RedisSerializationContextBuilder<String, Stock> builder =
+        RedisSerializationContext.RedisSerializationContextBuilder<String, StockRedisDto> builder =
                 RedisSerializationContext.newSerializationContext(new Jackson2JsonRedisSerializer<>(String.class));
-        RedisSerializationContext<String, Stock> context = builder.value(serializer).build();
+        RedisSerializationContext<String, StockRedisDto> context = builder.value(serializer).build();
 
         return new ReactiveRedisTemplate<>(factory, context);
     }
@@ -45,5 +47,12 @@ public class WebConfig {
         RedisSerializationContext<String, Company> context = builder.value(serializer).build();
 
         return new ReactiveRedisTemplate<>(factory, context);
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return JsonMapper.builder()
+                .findAndAddModules()
+                .build();
     }
 }

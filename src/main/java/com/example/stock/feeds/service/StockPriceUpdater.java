@@ -1,5 +1,6 @@
 package com.example.stock.feeds.service;
 
+import com.example.stock.feeds.dto.StockRedisDto;
 import com.example.stock.feeds.model.Company;
 import com.example.stock.feeds.model.Stock;
 import lombok.extern.slf4j.XSlf4j;
@@ -15,7 +16,7 @@ import java.time.Instant;
 @Service
 public record StockPriceUpdater(@NonNull StockService stockService,
                                 @NonNull CompanyService companyService,
-                                @NonNull ReactiveRedisTemplate<String, Stock> reactiveRedisStockTemplate) {
+                                @NonNull ReactiveRedisTemplate<String, StockRedisDto> reactiveRedisStockTemplate) {
     @Scheduled(fixedDelay = 60_000, initialDelay = 20_000)
     public void updatePricesMulti() {
         companyService.findAll()
