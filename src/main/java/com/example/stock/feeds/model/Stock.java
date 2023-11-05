@@ -1,5 +1,10 @@
 package com.example.stock.feeds.model;
 
-public record Stock(String name, String code, float price, String companySymbol) {
+import lombok.Builder;
+
+import java.time.Instant;
+
+@Builder
+public record Stock(Integer id, float price, Integer companyId, Instant timeUpdate) {
 
 }

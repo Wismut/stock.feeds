@@ -1,6 +1,7 @@
 package com.example.stock.feeds.service;
 
 import com.example.stock.feeds.model.Company;
+import com.example.stock.feeds.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.lang.NonNull;
@@ -8,13 +9,13 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.Duration;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
     private final ReactiveRedisTemplate<String, Company> reactiveRedisCompanyTemplate;
+    private final CompanyRepository repository;
 
     public static final String KEY = "company:";
 
@@ -24,12 +25,11 @@ public class CompanyService {
     }
 
     public Flux<Company> findAll() {
-        return reactiveRedisCompanyTemplate.keys(KEY + "*")
-                .flatMap(key -> reactiveRedisCompanyTemplate.opsForValue().get(key));
+        return repository.findAll();
     }
 
     public Mono<Company> save(@NonNull Company company) {
-        return reactiveRedisCompanyTemplate.opsForValue().set(KEY + company.symbol(), company, Duration.ofSeconds(90)).thenReturn(company);
+        return repository.save(company);
     }
 
     public Mono<Boolean> deleteById(@NonNull Long id) {

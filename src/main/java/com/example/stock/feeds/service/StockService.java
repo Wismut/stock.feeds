@@ -1,6 +1,7 @@
 package com.example.stock.feeds.service;
 
 import com.example.stock.feeds.model.Stock;
+import com.example.stock.feeds.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -17,6 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class StockService {
     private final ReactiveRedisTemplate<String, Stock> reactiveRedisStockTemplate;
+    private final StockRepository repository;
     public static final String KEY = "stock:";
 
     public Mono<Stock> findByCode(@NonNull String code) {
@@ -30,7 +32,8 @@ public class StockService {
     }
 
     public Mono<Stock> save(@NonNull Stock stock) {
-        return reactiveRedisStockTemplate.opsForValue().set(KEY + stock.code(), stock, Duration.ofSeconds(90)).thenReturn(stock);
+        repository.save(stock);
+        return reactiveRedisStockTemplate.opsForValue().set(KEY + stock.companyId(), stock, Duration.ofSeconds(90)).thenReturn(stock);
     }
 
     public Mono<Boolean> deleteById(@NonNull Long id) {

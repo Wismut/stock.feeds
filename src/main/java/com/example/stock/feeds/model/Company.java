@@ -1,5 +1,8 @@
 package com.example.stock.feeds.model;
 
-public record Company(String name, String symbol) {
+import lombok.Builder;
+
+@Builder
+public record Company(Integer id, String name, String symbol) {
 
 }
