@@ -23,7 +23,6 @@ public class DataLoader {
     @EventListener(ApplicationReadyEvent.class)
     public void createAndSaveCompanies() {
         final var now = LocalDateTime.now();
-        companyService.deleteAll();
         Flux.range(0, 100_000)
                 .flatMap(i -> createAndSaveCompany())
                 .subscribe();

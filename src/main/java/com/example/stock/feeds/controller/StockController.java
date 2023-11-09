@@ -15,6 +15,6 @@ public record StockController(StockService service) {
 
     @GetMapping("/{stock_code}/quote")
     public Mono<StockRedisDto> findByCode(@PathVariable("stock_code") String code) {
-        return service.findByCode(code);
+        return service.findBySymbol(code);
     }
 }

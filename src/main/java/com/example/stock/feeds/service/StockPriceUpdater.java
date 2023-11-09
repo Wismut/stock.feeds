@@ -1,10 +1,8 @@
 package com.example.stock.feeds.service;
 
-import com.example.stock.feeds.dto.StockRedisDto;
 import com.example.stock.feeds.model.Company;
 import com.example.stock.feeds.model.Stock;
 import lombok.extern.slf4j.XSlf4j;
-import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -15,8 +13,7 @@ import java.time.Instant;
 @XSlf4j
 @Service
 public record StockPriceUpdater(@NonNull StockService stockService,
-                                @NonNull CompanyService companyService,
-                                @NonNull ReactiveRedisTemplate<String, StockRedisDto> reactiveRedisStockTemplate) {
+                                @NonNull CompanyService companyService) {
     @Scheduled(fixedDelay = 60_000, initialDelay = 20_000)
     public void updatePricesMulti() {
         companyService.findAll()
