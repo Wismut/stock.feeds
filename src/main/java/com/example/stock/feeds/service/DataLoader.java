@@ -33,6 +33,6 @@ public class DataLoader {
         final var companyName = UUID.randomUUID().toString();
         final var stockSymbol = UUID.randomUUID().toString();
         companyStockService.put(companyName, stockSymbol);
-        return companyService.save(Company.builder().name(companyName).build());
+        return companyService.save(Company.builder().name(companyName).symbol(stockSymbol).build());
     }
 }

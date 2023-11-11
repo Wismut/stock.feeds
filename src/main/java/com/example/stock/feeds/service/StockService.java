@@ -1,8 +1,8 @@
 package com.example.stock.feeds.service;
 
-import com.example.stock.feeds.dto.StockRedisDto;
 import com.example.stock.feeds.mapper.StockMapper;
 import com.example.stock.feeds.model.Stock;
+import com.example.stock.feeds.repository.CompanyRepository;
 import com.example.stock.feeds.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
@@ -17,19 +17,20 @@ import static reactor.core.publisher.Mono.empty;
 @Service
 @RequiredArgsConstructor
 public class StockService {
-    private final StockRepository repository;
     private final StockMapper mapper;
+    private final StockRepository stockRepository;
+    private final CompanyRepository companyRepository;
 
     public Mono<Stock> save(@NonNull Stock stock) {
-        return repository.save(stock);
+        return stockRepository.save(stock);
     }
 
-    public Mono<StockRedisDto> findBySymbol(@NonNull String symbol) {
-        var stock = repository.findBySymbol(symbol);
-        if (isNull(stock)) {
+    public Mono<Stock> findBySymbol(@NonNull String symbol) {
+        var companyMono = companyRepository.findBySymbol(symbol);
+        if (isNull(companyMono)) {
             return empty();
         } else {
-            return Mono.just(mapper.toDto(stock.block()));
+            return Mono.just(stockRepository.findByCompanyId(companyMono.block().id()).sort((o1, o2) -> o1.timeUpdate().isAfter(o2.timeUpdate()) ? 1 : -1).blockFirst());
         }
     }
 }
